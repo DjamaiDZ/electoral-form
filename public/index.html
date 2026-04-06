@@ -297,8 +297,8 @@
       <div class="section-title"><span>1</span>Identification consulaire</div>
 
       <div class="field">
-        <label>N° d'inscription consulaire <span class="req">*</span></label>
-        <input type="text" name="consularNumber" placeholder="Ex : 2024-FR-00123" required>
+        <label>N° d'inscription consulaire <span style="color:var(--muted);font-weight:300;font-size:0.75rem;">(optionnel)</span></label>
+        <input type="text" name="consularNumber" placeholder="Ex : 2024-FR-00123 — laissez vide si inconnu">
       </div>
     </div>
 
@@ -377,8 +377,16 @@
       </div>
 
       <div class="field" id="spouseField" style="display:none;">
-        <label>Nom du conjoint(e)</label>
-        <input type="text" name="spouseName" placeholder="Nom complet du conjoint">
+        <div class="row-2">
+          <div class="field">
+            <label>Prénom du conjoint(e)</label>
+            <input type="text" name="spouseFirstName" placeholder="Prénom">
+          </div>
+          <div class="field">
+            <label>Nom du conjoint(e)</label>
+            <input type="text" name="spouseName" placeholder="Nom">
+          </div>
+        </div>
       </div>
     </div>
 
@@ -387,8 +395,19 @@
       <div class="section-title"><span>5</span>Coordonnées</div>
 
       <div class="field">
-        <label>Adresse complète <span class="req">*</span></label>
-        <input type="text" name="address" placeholder="N°, rue, code postal, ville" required>
+        <label>Rue / N° <span class="req">*</span></label>
+        <input type="text" name="street" placeholder="N°, rue" required>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Code postal <span class="req">*</span></label>
+          <input type="text" name="postalCode" placeholder="Ex : 90000" required>
+        </div>
+        <div class="field">
+          <label>Ville <span class="req">*</span></label>
+          <input type="text" name="addressCity" placeholder="Ex : Belfort" required>
+        </div>
       </div>
 
       <div class="row-2">
@@ -438,6 +457,13 @@
     <!-- Submit -->
     <div class="submit-wrap">
       <button type="submit" id="submitBtn">Envoyer la demande →</button>
+    </div>
+
+    <!-- Messages résultat -->
+    <div id="successMsg" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#e6f4ed; border:1.5px solid #006233; border-radius:6px; color:#006233; font-weight:600; font-size:0.95rem;">
+      ✅ Votre demande a bien été envoyée ! Vous recevrez une confirmation par email.
+    </div>
+    <div id="errorMsg" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#fde8ec; border:1.5px solid #D21034; border-radius:6px; color:#D21034; font-size:0.9rem;">
     </div>
 
     <div class="notice">
@@ -545,18 +571,32 @@
       });
 
       if (res.ok) {
-        showToast('✓ Demande envoyée avec succès !', 'success');
+        // Message de succès visible et persistant
+        btn.textContent = '✓ Demande envoyée !';
+        btn.style.background = '#006233';
+        document.getElementById('successMsg').style.display = 'block';
+        document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth' });
         this.reset();
         clearSignature();
         document.getElementById('spouseField').style.display = 'none';
         document.querySelector('[name="requestDate"]').value = today;
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Envoyer la demande →';
+          btn.style.background = '';
+        }, 5000);
       } else {
-        const err = await res.text();
-        showToast('Erreur : ' + err, 'error');
+        const errText = await res.text();
+        // Affiche l'erreur clairement
+        document.getElementById('errorMsg').textContent = 'Erreur : ' + errText;
+        document.getElementById('errorMsg').style.display = 'block';
+        document.getElementById('errorMsg').scrollIntoView({ behavior: 'smooth' });
+        btn.disabled = false;
+        btn.textContent = 'Envoyer la demande →';
       }
     } catch(err) {
-      showToast('Erreur réseau. Réessayez.', 'error');
-    } finally {
+      document.getElementById('errorMsg').textContent = 'Erreur réseau. Vérifiez votre connexion et réessayez.';
+      document.getElementById('errorMsg').style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Envoyer la demande →';
     }
