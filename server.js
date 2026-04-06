@@ -23,57 +23,28 @@ app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── PDF field coordinates ────────────────────────────────────────────────────
-// Measured precisely from the real PDF (enrolment_electoral.pdf)
+// Measured precisely from: Consulat d'Algérie à Besançon (DEMANDE D'INSCRIPTION)
 // PDF is A4: 595.3 x 841.9 pt — pdf-lib origin = bottom-left
-// x values: just after the English label ends; y = 841.9 - pymupdf_y_bottom
+// x = just after the French label; y = 841.9 - pymupdf_y_bottom
 const FIELDS = {
-  // Consular registration number  (label ends x=225.8)
-  consularNumber:  { x: 230, y: 485.3, size: 9, maxWidth: 280 },
-
-  // First name  (label ends x=127.6)
-  firstName:       { x: 160, y: 459.4, size: 9, maxWidth: 340 },
-
-  // Maiden name  (label ends x=141.8)
-  maidenName:      { x: 160, y: 433.4, size: 9, maxWidth: 340 },
-
-  // Last name  (label ends x=125.2)
-  lastName:        { x: 160, y: 407.5, size: 9, maxWidth: 340 },
-
-  // Date of birth  (label ends x=156)
-  dateOfBirth:     { x: 215, y: 381.6, size: 9, maxWidth: 200 },
-
-  // Place of birth  (label ends x=141.3)
-  placeOfBirth:    { x: 160, y: 355.7, size: 9, maxWidth: 340 },
-
-  // Father's name — single field "prénom + nom" on one line (label ends x=145)
-  fatherName:      { x: 160, y: 329.6, size: 9, maxWidth: 340 },
-
-  // Mother's name — prénom + nom on one line  (label ends x=149)
-  // The PDF label reads "اسم و لقب الأم" = prénom et nom de la mère
-  motherName:      { x: 160, y: 302.9, size: 9, maxWidth: 340 },
-
-  // Marital status  (label ends x=144.2)
-  maritalStatus:   { x: 160, y: 276.1, size: 9, maxWidth: 340 },
-
-  // Spouse name  (label ends x=138.6)
-  spouseName:      { x: 160, y: 250.2, size: 9, maxWidth: 340 },
-
-  // Address  (label ends x=119.3 with colon)
-  address:         { x: 130, y: 224.1, size: 9, maxWidth: 390 },
-
-  // Phone  (label ends x=147.6)
-  phone:           { x: 160, y: 197.3, size: 9, maxWidth: 340 },
-
-  // Email  (label ends x=102.6)
-  email:           { x: 115, y: 171.4, size: 9, maxWidth: 350 },
-
-  // "In .... on ...."  line  (y_pdflib = 119.7)
-  city:            { x: 90,  y: 119.7, size: 9, maxWidth: 130 },   // after "In"
-  requestDate:     { x: 270, y: 119.7, size: 9, maxWidth: 140 },   // after "on"
-
-  // Signature image — placed below "Applicant's signature" text (y≈93.7)
-  // We put the image slightly above that line
-  signature: { x: 90, y: 50, w: 180, h: 55 },
+  consularNumber  : { x: 230, y: 483.9, size: 9, maxWidth: 310 },
+  lastName        : { x:  75, y: 456.1, size: 9, maxWidth: 440 },
+  maidenName      : { x: 145, y: 428.1, size: 9, maxWidth: 370 },
+  firstName       : { x: 100, y: 400.1, size: 9, maxWidth: 415 },
+  dateOfBirth     : { x:  75, y: 372.2, size: 9, maxWidth: 155 },  // "Né(e) le :"
+  placeOfBirth    : { x: 265, y: 372.2, size: 9, maxWidth: 200 },  // "À"
+  fatherName      : { x: 165, y: 344.3, size: 9, maxWidth: 350 },
+  motherName      : { x: 220, y: 316.4, size: 9, maxWidth: 295 },
+  maritalStatus   : { x:  90, y: 288.4, size: 9, maxWidth: 420 },
+  spouseName      : { x: 155, y: 260.6, size: 9, maxWidth: 355 },
+  spouseFirstName : { x: 185, y: 232.6, size: 9, maxWidth: 325 },
+  address         : { x:  90, y: 204.6, size: 9, maxWidth: 420 },
+  postalCode      : { x: 105, y: 176.8, size: 9, maxWidth: 405 },
+  phone           : { x: 150, y: 148.8, size: 9, maxWidth: 355 },
+  email           : { x:  80, y: 120.8, size: 9, maxWidth: 400 },
+  city            : { x: 370, y:  80.5, size: 9, maxWidth: 100 },  // "À"
+  requestDate     : { x: 460, y:  80.5, size: 9, maxWidth:  90 },  // "le"
+  signature       : { x:  36, y:  58,   w: 160,  h: 45 },
 };
 
 // ── PDF builder ──────────────────────────────────────────────────────────────
@@ -134,9 +105,14 @@ async function fillPDF(data) {
   drawField('motherName', motherFull);
 
   drawField('maritalStatus',   data.maritalStatus);
-  drawField('spouseName',      data.spouseName);
+  // Conjoint : prénom + nom sur une ligne
+  const spouseFull = [data.spouseFirstName, data.spouseName].filter(Boolean).join(' ');
+  drawField('spouseName', spouseFull);
 
-  drawField('address',         data.address);
+  // Adresse : rue + code postal + ville
+  const addressFull = [data.street, data.postalCode, data.addressCity].filter(Boolean).join(', ');
+  drawField('address', addressFull);
+
   drawField('phone',           data.phone);
   drawField('email',           data.email);
 
@@ -187,7 +163,7 @@ async function sendEmail(pdfBuffer, data) {
       ``,
       `Nom     : ${data.lastName} ${data.firstName}`,
       `Né(e) le : ${data.dateOfBirth} à ${data.placeOfBirth}`,
-      `Adresse  : ${data.address}`,
+      `Adresse  : ${data.street}, ${data.postalCode} ${data.addressCity}`,
       `Email    : ${data.email}`,
       `Tél      : ${data.phone}`,
       ``,
@@ -206,11 +182,12 @@ app.post('/send', async (req, res) => {
   try {
     const data = req.body;
 
-    // Basic server-side validation
+    // Basic server-side validation (consularNumber est optionnel)
     const required = ['firstName','lastName','dateOfBirth','placeOfBirth',
                       'fatherFirstName','fatherLastName',
                       'motherFirstName','motherLastName',
-                      'maritalStatus','address','phone','email','city','requestDate'];
+                      'maritalStatus','street','postalCode','addressCity',
+                      'phone','email','city','requestDate'];
     const missing = required.filter(k => !String(data[k] || '').trim());
     if (missing.length) {
       return res.status(400).send(`Champs manquants : ${missing.join(', ')}`);
@@ -236,3 +213,4 @@ app.listen(CONFIG.PORT, () => {
   if (!CONFIG.EMAIL_PASS)        console.warn('⚠️   EMAIL_PASS non défini');
   if (!CONFIG.DESTINATION_EMAIL) console.warn('⚠️   DESTINATION_EMAIL non défini');
 });
+
