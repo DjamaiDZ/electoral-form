@@ -9,598 +9,415 @@
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
   <style>
     :root {
-      --green:   #006233;
-      --red:     #D21034;
-      --cream:   #FAF8F2;
-      --beige:   #EFE9D8;
-      --dark:    #1A1A1A;
-      --muted:   #6B6457;
-      --border:  #CEC8B8;
-      --white:   #FFFFFF;
-      --radius:  6px;
-      --shadow:  0 2px 16px rgba(0,0,0,0.08);
+      --green:  #006233;
+      --red:    #D21034;
+      --cream:  #FAF8F2;
+      --beige:  #EFE9D8;
+      --dark:   #1A1A1A;
+      --muted:  #6B6457;
+      --border: #CEC8B8;
+      --white:  #FFFFFF;
+      --radius: 6px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.08);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; padding: 0 0 3rem; }
 
-    body {
-      font-family: 'Source Sans 3', sans-serif;
-      font-weight: 400;
-      background: var(--cream);
-      color: var(--dark);
-      min-height: 100vh;
-      padding: 0 0 3rem;
-    }
+    /* Header */
+    header { background: var(--green); color: white; padding: 1.25rem 1rem 1rem; text-align: center; border-bottom: 4px solid var(--red); }
+    .flag-wrap { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .flag-svg { width: 64px; height: 43px; border-radius: 3px; box-shadow: 0 1px 6px rgba(0,0,0,0.4); flex-shrink: 0; }
+    header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 4vw, 1.35rem); font-weight: 600; line-height: 1.35; }
+    header p { font-size: 0.74rem; font-weight: 300; opacity: 0.85; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
 
-    /* ── Header ── */
-    header {
-      background: var(--green);
-      color: white;
-      padding: 1.5rem 1.25rem 1.25rem;
-      text-align: center;
-      border-bottom: 4px solid var(--red);
-    }
-    .header-flag {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 0.6rem;
-    }
-    .flag-stripe {
-      width: 3px;
-      height: 36px;
-      background: var(--red);
-      border-radius: 2px;
-    }
-    .star-crescent {
-      font-size: 1.4rem;
-      color: var(--red);
-    }
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.1rem, 4vw, 1.5rem);
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-    header p {
-      font-size: 0.78rem;
-      font-weight: 300;
-      opacity: 0.85;
-      margin-top: 0.3rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
+    /* Layout */
+    main { max-width: 640px; margin: 0 auto; padding: 0 1rem; }
+    .section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.25rem; margin-top: 1.25rem; box-shadow: var(--shadow); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--beige); padding-bottom: 0.6rem; margin-bottom: 1.1rem; }
+    .section-title span { display: inline-block; background: var(--green); color: white; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 20px; margin-right: 0.5rem; font-family: 'Source Sans 3', sans-serif; vertical-align: middle; }
 
-    /* ── Main container ── */
-    main {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    /* ── Section cards ── */
-    .section {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem 1.25rem;
-      margin-top: 1.25rem;
-      box-shadow: var(--shadow);
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid var(--beige);
-      padding-bottom: 0.6rem;
-      margin-bottom: 1.1rem;
-    }
-    .section-title span {
-      display: inline-block;
-      background: var(--green);
-      color: white;
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 20px;
-      margin-right: 0.5rem;
-      font-family: 'Source Sans 3', sans-serif;
-      vertical-align: middle;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── Form fields ── */
-    .field {
-      margin-bottom: 1rem;
-    }
+    /* Fields */
+    .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 440px) { .row-2 { grid-template-columns: 1fr; } }
 
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-    @media (max-width: 440px) {
-      .row-2 { grid-template-columns: 1fr; gap: 0; }
-    }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+    label .req { color: var(--red); margin-left: 2px; }
+    label .opt { color: var(--muted); font-weight: 300; font-size: 0.72rem; margin-left: 4px; text-transform: none; letter-spacing: 0; }
 
-    label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.3rem;
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+      width: 100%; padding: 0.65rem 0.8rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      background: var(--cream); font-family: 'Source Sans 3', sans-serif;
+      font-size: 16px; color: var(--dark);
+      transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
     }
-    label .req {
-      color: var(--red);
-      margin-left: 2px;
-    }
+    input:focus, select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,98,51,0.12); background: white; }
+    input.invalid { border-color: var(--red) !important; background: #fff5f6; }
+    .field-error { font-size: 0.74rem; color: var(--red); margin-top: 0.25rem; display: none; }
+    .field-error.show { display: block; }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 0.65rem 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--cream);
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 16px; /* prevents iOS zoom */
-      color: var(--dark);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      appearance: none;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(0,98,51,0.12);
-      background: white;
-    }
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6457' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      padding-right: 2rem;
-    }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6457' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem; cursor: pointer; }
 
-    /* ── Signature ── */
-    .sig-wrap {
-      background: white;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-    }
-    canvas#signatureCanvas {
-      display: block;
-      width: 100%;
-      height: 160px;
-      cursor: crosshair;
-      touch-action: none;
-    }
-    .sig-hint {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 0.8rem;
-      color: var(--border);
-      pointer-events: none;
-      text-align: center;
-      font-style: italic;
-    }
+    /* Fait à */
+    .fait-a { display: flex; align-items: flex-start; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .fait-a .fa-label { font-size: 0.88rem; color: var(--muted); white-space: nowrap; padding-top: 0.7rem; }
+    .fait-a .fa-field { flex: 1; min-width: 110px; }
+
+    /* Signature */
+    .sig-wrap { background: white; border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; }
+    canvas#signatureCanvas { display: block; width: 100%; height: 150px; cursor: crosshair; touch-action: none; }
+    .sig-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 0.8rem; color: var(--border); pointer-events: none; font-style: italic; }
     .sig-hint.hidden { display: none; }
-    .sig-toolbar {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    .btn-clear {
-      font-size: 0.8rem;
-      padding: 0.35rem 0.75rem;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--muted);
-      cursor: pointer;
-      font-family: 'Source Sans 3', sans-serif;
-    }
+    .btn-clear { margin-top: 0.5rem; font-size: 0.8rem; padding: 0.35rem 0.75rem; background: transparent; border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); cursor: pointer; font-family: 'Source Sans 3', sans-serif; }
     .btn-clear:hover { border-color: var(--red); color: var(--red); }
 
-    /* ── Submit ── */
-    .submit-wrap {
-      margin-top: 1.5rem;
-      padding: 0 0.1rem;
-    }
-    button[type="submit"] {
-      width: 100%;
-      padding: 1rem;
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
+    /* Submit */
+    .submit-wrap { margin-top: 1.5rem; }
+    button[type="submit"] { width: 100%; padding: 1rem; background: var(--green); color: white; border: none; border-radius: var(--radius); font-family: 'Playfair Display', serif; font-size: 1.05rem; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s; }
     button[type="submit"]:hover { background: #004d27; }
-    button[type="submit"]:active { transform: scale(0.99); }
-    button[type="submit"]:disabled {
-      background: var(--muted);
-      cursor: not-allowed;
-    }
+    button[type="submit"]:disabled { background: var(--muted); cursor: not-allowed; }
 
-    /* ── Toast / messages ── */
-    #toast {
-      display: none;
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--dark);
-      color: white;
-      padding: 0.75rem 1.25rem;
-      border-radius: 40px;
-      font-size: 0.85rem;
-      z-index: 999;
-      white-space: nowrap;
-    }
-    #toast.success { background: var(--green); }
-    #toast.error   { background: var(--red); }
-    #toast.show    { display: block; animation: fadeInUp 0.3s ease; }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    /* ── Notice ── */
-    .notice {
-      margin-top: 1.25rem;
-      padding: 0.85rem 1rem;
-      background: var(--beige);
-      border-left: 3px solid var(--green);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
+    #successMsg { display:none; margin-top:1rem; padding:1rem 1.25rem; background:#e6f4ed; border:1.5px solid var(--green); border-radius:var(--radius); color:var(--green); font-weight:600; }
+    #errorMsg   { display:none; margin-top:1rem; padding:1rem 1.25rem; background:#fde8ec; border:1.5px solid var(--red);   border-radius:var(--radius); color:var(--red); font-size:0.9rem; }
+    .notice { margin-top:1.25rem; padding:0.85rem 1rem; background:var(--beige); border-left:3px solid var(--green); border-radius:0 var(--radius) var(--radius) 0; font-size:0.8rem; color:var(--muted); line-height:1.5; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-flag">
-    <div class="flag-stripe"></div>
-    <span class="star-crescent">☽★</span>
-    <div class="flag-stripe"></div>
+  <div class="flag-wrap">
+    <!-- Drapeau algérien officiel -->
+    <svg class="flag-svg" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+      <rect width="450" height="600" fill="#006233"/>
+      <rect x="450" width="450" height="600" fill="#ffffff"/>
+      <circle cx="495" cy="300" r="130" fill="#D21034"/>
+      <circle cx="530" cy="300" r="130" fill="#ffffff"/>
+      <!-- Étoile à 5 branches -->
+      <polygon fill="#D21034" points="
+        480,195 492,230 529,230 499,252 510,287
+        480,265 450,287 461,252 431,230 468,230"
+        transform="rotate(18,480,241)"/>
+    </svg>
+    <div>
+      <h1>Demande d'inscription sur la liste électorale</h1>
+      <p>Consulat d'Algérie à Besançon</p>
+    </div>
   </div>
-  <h1>Demande d'inscription sur les listes électorales</h1>
-  <p>Consulat général d'Algérie · Ressortissants à l'étranger</p>
 </header>
 
 <main>
-  <form id="electoralForm" novalidate>
+<form id="electoralForm" novalidate>
 
-    <!-- Section 1 : Identité consulaire -->
-    <div class="section">
-      <div class="section-title"><span>1</span>Identification consulaire</div>
+  <!-- 1. Identification -->
+  <div class="section">
+    <div class="section-title"><span>1</span>Identification consulaire</div>
+    <div class="field">
+      <label>N° d'immatriculation consulaire <span class="opt">(optionnel — laissez vide si inconnu)</span></label>
+      <input type="text" name="consularNumber" placeholder="Ex : FR-BES-2024-00123">
+    </div>
+  </div>
 
+  <!-- 2. État civil -->
+  <div class="section">
+    <div class="section-title"><span>2</span>État civil</div>
+
+    <div class="row-2">
       <div class="field">
-        <label>N° d'inscription consulaire <span style="color:var(--muted);font-weight:300;font-size:0.75rem;">(optionnel)</span></label>
-        <input type="text" name="consularNumber" placeholder="Ex : 2024-FR-00123 — laissez vide si inconnu">
+        <label>Nom <span class="req">*</span></label>
+        <input type="text" name="lastName" placeholder="Nom de famille" required autocomplete="family-name">
+        <div class="field-error" id="err-lastName">Veuillez saisir votre nom.</div>
       </div>
-    </div>
-
-    <!-- Section 2 : État civil -->
-    <div class="section">
-      <div class="section-title"><span>2</span>État civil</div>
-
-      <div class="row-2">
-        <div class="field">
-          <label>Prénom <span class="req">*</span></label>
-          <input type="text" name="firstName" placeholder="Prénom" required>
-        </div>
-        <div class="field">
-          <label>Nom de famille <span class="req">*</span></label>
-          <input type="text" name="lastName" placeholder="Nom" required>
-        </div>
-      </div>
-
       <div class="field">
-        <label>Nom de jeune fille</label>
-        <input type="text" name="maidenName" placeholder="Si différent du nom actuel">
-      </div>
-
-      <div class="row-2">
-        <div class="field">
-          <label>Date de naissance <span class="req">*</span></label>
-          <input type="date" name="dateOfBirth" required>
-        </div>
-        <div class="field">
-          <label>Lieu de naissance <span class="req">*</span></label>
-          <input type="text" name="placeOfBirth" placeholder="Ville, Wilaya" required>
-        </div>
+        <label>Prénom(s) <span class="req">*</span></label>
+        <input type="text" name="firstName" placeholder="Prénom(s)" required autocomplete="given-name">
+        <div class="field-error" id="err-firstName">Veuillez saisir votre prénom.</div>
       </div>
     </div>
 
-    <!-- Section 3 : Filiation -->
-    <div class="section">
-      <div class="section-title"><span>3</span>Filiation</div>
-
-      <div class="row-2">
-        <div class="field">
-          <label>Prénom du père <span class="req">*</span></label>
-          <input type="text" name="fatherFirstName" placeholder="Prénom" required>
-        </div>
-        <div class="field">
-          <label>Nom du père <span class="req">*</span></label>
-          <input type="text" name="fatherLastName" placeholder="Nom" required>
-        </div>
-      </div>
-
-      <div class="row-2">
-        <div class="field">
-          <label>Prénom de la mère <span class="req">*</span></label>
-          <input type="text" name="motherFirstName" placeholder="Prénom" required>
-        </div>
-        <div class="field">
-          <label>Nom de la mère <span class="req">*</span></label>
-          <input type="text" name="motherLastName" placeholder="Nom" required>
-        </div>
-      </div>
+    <div class="field">
+      <label>Nom de jeune fille <span class="opt">(optionnel)</span></label>
+      <input type="text" name="maidenName" placeholder="Si différent du nom actuel">
     </div>
 
-    <!-- Section 4 : Situation familiale -->
-    <div class="section">
-      <div class="section-title"><span>4</span>Situation familiale</div>
-
+    <div class="row-2">
       <div class="field">
-        <label>Situation <span class="req">*</span></label>
-        <select name="maritalStatus" required>
-          <option value="" disabled selected>— Sélectionner —</option>
-          <option value="Célibataire">Célibataire</option>
-          <option value="Marié(e)">Marié(e)</option>
-          <option value="Divorcé(e)">Divorcé(e)</option>
-          <option value="Veuf / Veuve">Veuf / Veuve</option>
-        </select>
+        <label>Date de naissance <span class="req">*</span></label>
+        <input type="date" name="dateOfBirth" required>
+        <div class="field-error" id="err-dateOfBirth">Date invalide.</div>
       </div>
-
-      <div class="field" id="spouseField" style="display:none;">
-        <div class="row-2">
-          <div class="field">
-            <label>Prénom du conjoint(e)</label>
-            <input type="text" name="spouseFirstName" placeholder="Prénom">
-          </div>
-          <div class="field">
-            <label>Nom du conjoint(e)</label>
-            <input type="text" name="spouseName" placeholder="Nom">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 5 : Coordonnées -->
-    <div class="section">
-      <div class="section-title"><span>5</span>Coordonnées</div>
-
       <div class="field">
-        <label>Rue / N° <span class="req">*</span></label>
-        <input type="text" name="street" placeholder="N°, rue" required>
+        <label>Lieu de naissance <span class="req">*</span></label>
+        <input type="text" name="placeOfBirth" placeholder="Ville, Wilaya" required>
+        <div class="field-error" id="err-placeOfBirth">Veuillez saisir le lieu de naissance.</div>
       </div>
+    </div>
+  </div>
 
+  <!-- 3. Filiation -->
+  <div class="section">
+    <div class="section-title"><span>3</span>Filiation</div>
+    <div class="field">
+      <label>Prénom(s) du père <span class="req">*</span></label>
+      <input type="text" name="fatherFirstName" placeholder="Prénom(s) du père" required>
+      <div class="field-error" id="err-fatherFirstName">Champ requis.</div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Prénom(s) de la mère <span class="req">*</span></label>
+        <input type="text" name="motherFirstName" placeholder="Prénom(s)" required>
+        <div class="field-error" id="err-motherFirstName">Champ requis.</div>
+      </div>
+      <div class="field">
+        <label>Nom de la mère <span class="req">*</span></label>
+        <input type="text" name="motherLastName" placeholder="Nom" required>
+        <div class="field-error" id="err-motherLastName">Champ requis.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Situation familiale -->
+  <div class="section">
+    <div class="section-title"><span>4</span>Situation familiale</div>
+    <div class="field">
+      <label>État civil <span class="req">*</span></label>
+      <select name="maritalStatus" required>
+        <option value="" disabled selected>— Sélectionner —</option>
+        <option value="Célibataire">Célibataire</option>
+        <option value="Marié(e)">Marié(e)</option>
+        <option value="Divorcé(e)">Divorcé(e)</option>
+        <option value="Veuf / Veuve">Veuf / Veuve</option>
+      </select>
+      <div class="field-error" id="err-maritalStatus">Veuillez sélectionner votre situation.</div>
+    </div>
+    <div id="spouseFields" style="display:none;">
       <div class="row-2">
         <div class="field">
-          <label>Code postal <span class="req">*</span></label>
-          <input type="text" name="postalCode" placeholder="Ex : 90000" required>
+          <label>Prénom du/de la conjoint(e)</label>
+          <input type="text" name="spouseFirstName" placeholder="Prénom">
         </div>
         <div class="field">
-          <label>Ville <span class="req">*</span></label>
-          <input type="text" name="addressCity" placeholder="Ex : Belfort" required>
-        </div>
-      </div>
-
-      <div class="row-2">
-        <div class="field">
-          <label>Téléphone <span class="req">*</span></label>
-          <input type="tel" name="phone" placeholder="+33 6 …" required>
-        </div>
-        <div class="field">
-          <label>Email <span class="req">*</span></label>
-          <input type="email" name="email" placeholder="you@example.com" required>
+          <label>Nom du/de la conjoint(e)</label>
+          <input type="text" name="spouseName" placeholder="Nom">
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Section 6 : Date & lieu de la demande -->
-    <div class="section">
-      <div class="section-title"><span>6</span>Déclaration</div>
+  <!-- 5. Coordonnées -->
+  <div class="section">
+    <div class="section-title"><span>5</span>Coordonnées</div>
+    <div class="field">
+      <label>Adresse (N°, rue) <span class="req">*</span></label>
+      <input type="text" name="street" placeholder="Ex : 12 rue de la Liberté" required>
+      <div class="field-error" id="err-street">Veuillez saisir votre adresse.</div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Code postal <span class="req">*</span></label>
+        <input type="text" name="postalCode" placeholder="Ex : 90000"
+               required inputmode="numeric" maxlength="10">
+        <div class="field-error" id="err-postalCode">Code postal invalide.</div>
+      </div>
+      <div class="field">
+        <label>Ville <span class="req">*</span></label>
+        <input type="text" name="addressCity" placeholder="Ex : Belfort" required>
+        <div class="field-error" id="err-addressCity">Veuillez saisir la ville.</div>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Téléphone <span class="req">*</span></label>
+        <input type="tel" name="phone" placeholder="+33 6 12 34 56 78"
+               required inputmode="tel" autocomplete="tel">
+        <div class="field-error" id="err-phone">Numéro invalide.</div>
+      </div>
+      <div class="field">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" name="email" placeholder="vous@exemple.com"
+               required inputmode="email" autocomplete="email">
+        <div class="field-error" id="err-email">Email invalide.</div>
+      </div>
+    </div>
+  </div>
 
-      <div class="row-2">
-        <div class="field">
-          <label>Ville <span class="req">*</span></label>
-          <input type="text" name="city" placeholder="Ville" required>
-        </div>
-        <div class="field">
-          <label>Date <span class="req">*</span></label>
-          <input type="date" name="requestDate" required>
-        </div>
+  <!-- 6. Signature & Déclaration -->
+  <div class="section">
+    <div class="section-title"><span>6</span>Signature &amp; Déclaration</div>
+
+    <div class="fait-a">
+      <span class="fa-label">Fait à :</span>
+      <div class="fa-field">
+        <input type="text" name="city" placeholder="Ville" required>
+        <div class="field-error" id="err-city">Veuillez saisir la ville.</div>
+      </div>
+      <span class="fa-label">le :</span>
+      <div class="fa-field">
+        <input type="date" name="requestDate" required>
+        <div class="field-error" id="err-requestDate">Date requise.</div>
       </div>
     </div>
 
-    <!-- Section 7 : Signature -->
-    <div class="section">
-      <div class="section-title"><span>7</span>Signature</div>
-      <p style="font-size:0.82rem; color:var(--muted); margin-bottom:0.75rem;">
-        Signez dans le cadre ci-dessous (stylet, doigt ou souris).
-      </p>
-      <div class="sig-wrap">
-        <canvas id="signatureCanvas"></canvas>
-        <div class="sig-hint" id="sigHint">Signez ici</div>
-      </div>
-      <div class="sig-toolbar">
-        <button type="button" class="btn-clear" onclick="clearSignature()">✕ Effacer</button>
-      </div>
-      <input type="hidden" name="signature" id="signatureData">
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem;">Signature (doigt, stylet ou souris) :</p>
+    <div class="sig-wrap">
+      <canvas id="signatureCanvas"></canvas>
+      <div class="sig-hint" id="sigHint">Signez ici</div>
     </div>
+    <button type="button" class="btn-clear" onclick="clearSignature()">✕ Effacer</button>
+    <div class="field-error" id="err-signature" style="margin-top:0.4rem;">Veuillez apposer votre signature.</div>
+    <input type="hidden" name="signature" id="signatureData">
+  </div>
 
-    <!-- Submit -->
-    <div class="submit-wrap">
-      <button type="submit" id="submitBtn">Envoyer la demande →</button>
-    </div>
+  <div class="submit-wrap">
+    <button type="submit" id="submitBtn">Envoyer la demande →</button>
+  </div>
 
-    <!-- Messages résultat -->
-    <div id="successMsg" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#e6f4ed; border:1.5px solid #006233; border-radius:6px; color:#006233; font-weight:600; font-size:0.95rem;">
-      ✅ Votre demande a bien été envoyée ! Vous recevrez une confirmation par email.
-    </div>
-    <div id="errorMsg" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#fde8ec; border:1.5px solid #D21034; border-radius:6px; color:#D21034; font-size:0.9rem;">
-    </div>
+  <div id="successMsg">✅ Votre demande a bien été envoyée !</div>
+  <div id="errorMsg"></div>
 
-    <div class="notice">
-      <strong>Important :</strong> Ce formulaire est transmis par email au consulat sous forme de PDF.
-      Veillez à ce que toutes les informations soient exactes avant d'envoyer.
-    </div>
+  <div class="notice">
+    <strong>Important :</strong> Ce formulaire est transmis par email au consulat sous forme de PDF.
+    Vérifiez bien toutes vos informations avant d'envoyer.
+  </div>
 
-  </form>
+</form>
 </main>
 
-<div id="toast"></div>
-
 <script>
-  /* ── Signature Pad ── */
-  const canvas = document.getElementById('signatureCanvas');
-  const sigHint = document.getElementById('sigHint');
-  let signaturePad;
+/* Signature */
+const canvas  = document.getElementById('signatureCanvas');
+const sigHint = document.getElementById('sigHint');
+let signaturePad;
 
-  function initPad() {
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const rect  = canvas.getBoundingClientRect();
-    const w = rect.width  || canvas.offsetWidth  || 400;
-    const h = 160;
-    canvas.width  = w * ratio;
-    canvas.height = h * ratio;
-    canvas.style.height = h + 'px';
-    const ctx = canvas.getContext('2d');
-    ctx.scale(ratio, ratio);
-    signaturePad = new SignaturePad(canvas, {
-      minWidth: 1, maxWidth: 2.5,
-      penColor: '#1A1A1A',
-      backgroundColor: 'rgba(0,0,0,0)'
-    });
-    signaturePad.addEventListener('beginStroke', () => {
-      sigHint.classList.add('hidden');
-    });
-  }
+function initPad() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const w = canvas.offsetWidth || 400;
+  canvas.width  = w * ratio;
+  canvas.height = 150 * ratio;
+  canvas.style.height = '150px';
+  canvas.getContext('2d').scale(ratio, ratio);
+  signaturePad = new SignaturePad(canvas, { minWidth:1, maxWidth:2.5, penColor:'#1A1A1A', backgroundColor:'rgba(0,0,0,0)' });
+  signaturePad.addEventListener('beginStroke', () => sigHint.classList.add('hidden'));
+}
+function clearSignature() { signaturePad && signaturePad.clear(); sigHint.classList.remove('hidden'); }
+window.addEventListener('load', initPad);
+window.addEventListener('resize', () => { const d = signaturePad && !signaturePad.isEmpty() ? signaturePad.toData() : null; initPad(); if (d) signaturePad.fromData(d); });
 
-  function clearSignature() {
-    signaturePad && signaturePad.clear();
-    sigHint.classList.remove('hidden');
-  }
+/* Conjoint toggle */
+document.querySelector('[name="maritalStatus"]').addEventListener('change', function() {
+  document.getElementById('spouseFields').style.display = this.value === 'Marié(e)' ? 'block' : 'none';
+});
 
-  window.addEventListener('load', initPad);
-  window.addEventListener('resize', () => {
-    if (!signaturePad) return;
-    const data = signaturePad.isEmpty() ? null : signaturePad.toData();
-    initPad();
-    if (data) signaturePad.fromData(data);
+/* Date par défaut */
+const today = new Date().toISOString().split('T')[0];
+document.querySelector('[name="requestDate"]').value = today;
+
+/* Live clear errors */
+document.querySelectorAll('input,select').forEach(el => {
+  el.addEventListener('input', () => {
+    el.classList.remove('invalid');
+    const err = document.getElementById('err-' + el.name);
+    if (err) err.classList.remove('show');
   });
+});
 
-  /* ── Spouse field toggle ── */
-  document.querySelector('[name="maritalStatus"]').addEventListener('change', function() {
-    document.getElementById('spouseField').style.display =
-      this.value === 'Marié(e)' ? 'block' : 'none';
-  });
+/* Code postal : chiffres seulement */
+document.querySelector('[name="postalCode"]').addEventListener('keypress', e => { if (!/[0-9]/.test(e.key)) e.preventDefault(); });
 
-  /* ── Today's date as default ── */
-  const today = new Date().toISOString().split('T')[0];
-  document.querySelector('[name="requestDate"]').value = today;
+/* Téléphone : caractères autorisés */
+document.querySelector('[name="phone"]').addEventListener('keypress', e => { if (!/[0-9\+\s\-\(\)]/.test(e.key)) e.preventDefault(); });
 
-  /* ── Toast helper ── */
-  function showToast(msg, type = '') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className   = 'show ' + type;
-    setTimeout(() => t.className = '', 3500);
+/* Validation */
+function validate() {
+  let ok = true;
+  function req(name, msg) {
+    const el = document.querySelector('[name="'+name+'"]');
+    if (!el) return;
+    if (!el.value.trim()) { el.classList.add('invalid'); const e = document.getElementById('err-'+name); if(e){e.textContent=msg;e.classList.add('show');} ok=false; }
+    else { el.classList.remove('invalid'); const e = document.getElementById('err-'+name); if(e) e.classList.remove('show'); }
+  }
+  function pat(name, regex, msg) {
+    const el = document.querySelector('[name="'+name+'"]');
+    if (!el || !el.value.trim()) return;
+    if (!regex.test(el.value.trim())) { el.classList.add('invalid'); const e = document.getElementById('err-'+name); if(e){e.textContent=msg;e.classList.add('show');} ok=false; }
+  }
+  req('lastName','Veuillez saisir votre nom.');
+  req('firstName','Veuillez saisir votre prénom.');
+  req('dateOfBirth','Veuillez saisir votre date de naissance.');
+  req('placeOfBirth','Veuillez saisir le lieu de naissance.');
+  req('fatherFirstName','Veuillez saisir le prénom du père.');
+  req('motherFirstName','Veuillez saisir le prénom de la mère.');
+  req('motherLastName','Veuillez saisir le nom de la mère.');
+  req('maritalStatus','Veuillez sélectionner votre situation.');
+  req('street','Veuillez saisir votre adresse.');
+  req('postalCode','Veuillez saisir votre code postal.');
+  req('addressCity','Veuillez saisir votre ville.');
+  req('phone','Veuillez saisir votre téléphone.');
+  req('email','Veuillez saisir votre email.');
+  req('city','Veuillez saisir la ville.');
+  req('requestDate','Date requise.');
+  pat('postalCode', /^[0-9]{4,10}$/, 'Code postal invalide (chiffres uniquement).');
+  pat('phone', /^[\+0-9\s\-\(\)]{7,20}$/, 'Numéro de téléphone invalide.');
+  pat('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Adresse email invalide.');
+  const dob = document.querySelector('[name="dateOfBirth"]');
+  if (dob && dob.value && new Date(dob.value) > new Date()) {
+    dob.classList.add('invalid');
+    const e = document.getElementById('err-dateOfBirth');
+    if(e){e.textContent='La date ne peut pas être dans le futur.';e.classList.add('show');}
+    ok = false;
+  }
+  return ok;
+}
+
+/* Submit */
+document.getElementById('electoralForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  document.getElementById('successMsg').style.display = 'none';
+  document.getElementById('errorMsg').style.display   = 'none';
+
+  const formOk = validate();
+  let sigOk = true;
+  if (!signaturePad || signaturePad.isEmpty()) {
+    document.getElementById('err-signature').classList.add('show'); sigOk = false;
+  } else {
+    document.getElementById('err-signature').classList.remove('show');
+  }
+  if (!formOk || !sigOk) {
+    const first = document.querySelector('.invalid, .field-error.show');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
   }
 
-  /* ── Form submit ── */
-  document.getElementById('electoralForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+  const payload = Object.fromEntries(new FormData(this).entries());
+  payload.signature = signaturePad.toDataURL('image/png');
 
-    // Validate required fields
-    const required = this.querySelectorAll('[required]');
-    let valid = true;
-    required.forEach(f => {
-      f.style.borderColor = '';
-      if (!f.value.trim()) {
-        f.style.borderColor = '#D21034';
-        valid = false;
-      }
-    });
-    if (!valid) { showToast('Veuillez remplir tous les champs obligatoires (*)', 'error'); return; }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
-    // Validate signature
-    if (!signaturePad || signaturePad.isEmpty()) {
-      showToast('Veuillez ajouter votre signature', 'error');
-      return;
+  try {
+    const res = await fetch('/send', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('successMsg').scrollIntoView({ behavior:'smooth' });
+      this.reset(); clearSignature();
+      document.getElementById('spouseFields').style.display = 'none';
+      document.querySelector('[name="requestDate"]').value = today;
+      btn.textContent = '✓ Envoyé !';
+      setTimeout(() => { btn.disabled=false; btn.textContent='Envoyer la demande →'; }, 4000);
+    } else {
+      const t = await res.text();
+      const el = document.getElementById('errorMsg');
+      el.textContent = 'Erreur : ' + t; el.style.display='block';
+      el.scrollIntoView({behavior:'smooth'});
+      btn.disabled=false; btn.textContent='Envoyer la demande →';
     }
-    document.getElementById('signatureData').value = signaturePad.toDataURL('image/png');
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Envoi en cours…';
-
-    try {
-      const formData = new FormData(this);
-      const payload  = Object.fromEntries(formData.entries());
-
-      const res = await fetch('/send', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        // Message de succès visible et persistant
-        btn.textContent = '✓ Demande envoyée !';
-        btn.style.background = '#006233';
-        document.getElementById('successMsg').style.display = 'block';
-        document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth' });
-        this.reset();
-        clearSignature();
-        document.getElementById('spouseField').style.display = 'none';
-        document.querySelector('[name="requestDate"]').value = today;
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.textContent = 'Envoyer la demande →';
-          btn.style.background = '';
-        }, 5000);
-      } else {
-        const errText = await res.text();
-        // Affiche l'erreur clairement
-        document.getElementById('errorMsg').textContent = 'Erreur : ' + errText;
-        document.getElementById('errorMsg').style.display = 'block';
-        document.getElementById('errorMsg').scrollIntoView({ behavior: 'smooth' });
-        btn.disabled = false;
-        btn.textContent = 'Envoyer la demande →';
-      }
-    } catch(err) {
-      document.getElementById('errorMsg').textContent = 'Erreur réseau. Vérifiez votre connexion et réessayez.';
-      document.getElementById('errorMsg').style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Envoyer la demande →';
-    }
-  });
+  } catch(err) {
+    const el = document.getElementById('errorMsg');
+    el.textContent='Erreur réseau. Vérifiez votre connexion.'; el.style.display='block';
+    btn.disabled=false; btn.textContent='Envoyer la demande →';
+  }
+});
 </script>
 </body>
 </html>
