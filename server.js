@@ -135,7 +135,7 @@ async function fillPDF(data) {
   return await pdfDoc.save();
 }
 
-// ── Email sender ─────────────────────────────────────────────────────────────
+// ── Email sender — SendGrid SMTP (port 587 fiable sur Render) ───────────────
 async function sendEmail(pdfBuffer, data) {
   if (!CONFIG.EMAIL_USER || !CONFIG.EMAIL_PASS) {
     throw new Error('Variables EMAIL_USER et EMAIL_PASS non configurées.');
@@ -144,11 +144,15 @@ async function sendEmail(pdfBuffer, data) {
     throw new Error('Variable DESTINATION_EMAIL non configurée.');
   }
 
+  // SendGrid SMTP : host=smtp.sendgrid.net, port=587, user='apikey', pass=SENDGRID_API_KEY
+  // Gmail classique : host=smtp.gmail.com, port=587, user=email, pass=app_password
   const transporter = nodemailer.createTransport({
     host: CONFIG.SMTP_HOST,
     port: CONFIG.SMTP_PORT,
-    secure: CONFIG.SMTP_PORT === 465,
+    secure: false,
+    requireTLS: true,
     auth: { user: CONFIG.EMAIL_USER, pass: CONFIG.EMAIL_PASS },
+    tls: { rejectUnauthorized: false }
   });
 
   const fileName = `inscription_electorale_${data.lastName || 'inconnu'}_${data.firstName || ''}.pdf`
@@ -213,4 +217,3 @@ app.listen(CONFIG.PORT, () => {
   if (!CONFIG.EMAIL_PASS)        console.warn('⚠️   EMAIL_PASS non défini');
   if (!CONFIG.DESTINATION_EMAIL) console.warn('⚠️   DESTINATION_EMAIL non défini');
 });
-
