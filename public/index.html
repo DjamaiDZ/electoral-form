@@ -24,11 +24,65 @@
     body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; padding: 0 0 3rem; }
 
     /* Header */
-    header { background: var(--green); color: white; padding: 1.25rem 1rem 1rem; text-align: center; border-bottom: 4px solid var(--red); }
-    .flag-wrap { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.75rem; }
-    .flag-svg { width: 64px; height: 43px; border-radius: 3px; box-shadow: 0 1px 6px rgba(0,0,0,0.4); flex-shrink: 0; }
-    header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 4vw, 1.35rem); font-weight: 600; line-height: 1.35; }
-    header p { font-size: 0.74rem; font-weight: 300; opacity: 0.85; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    header {
+      background: white;
+      padding: 1.5rem 1.25rem 1.25rem;
+      text-align: center;
+      border-bottom: 3px solid var(--green);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .flag-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.1rem;
+      margin-bottom: 0.9rem;
+    }
+    .flag-img {
+      width: 70px;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+    }
+    .header-text { text-align: left; }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.95rem, 3.5vw, 1.3rem);
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 1.35;
+    }
+    header h1 span { color: var(--green); }
+    header p {
+      font-size: 0.73rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .header-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+    }
+    .header-divider::before, .header-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--beige);
+    }
+    .header-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.75rem;
+      border: 1px solid var(--green);
+      border-radius: 20px;
+    }
 
     /* Layout */
     main { max-width: 640px; margin: 0 auto; padding: 0 1rem; }
@@ -88,22 +142,16 @@
 
 <header>
   <div class="flag-wrap">
-    <!-- Drapeau algérien officiel -->
-    <svg class="flag-svg" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
-      <rect width="450" height="600" fill="#006233"/>
-      <rect x="450" width="450" height="600" fill="#ffffff"/>
-      <circle cx="495" cy="300" r="130" fill="#D21034"/>
-      <circle cx="530" cy="300" r="130" fill="#ffffff"/>
-      <!-- Étoile à 5 branches -->
-      <polygon fill="#D21034" points="
-        480,195 492,230 529,230 499,252 510,287
-        480,265 450,287 461,252 431,230 468,230"
-        transform="rotate(18,480,241)"/>
-    </svg>
-    <div>
-      <h1>Demande d'inscription sur la liste électorale</h1>
+    <img class="flag-img"
+         src="https://flagcdn.com/w80/dz.png"
+         alt="Drapeau algérien">
+    <div class="header-text">
+      <h1>Demande d'inscription<br><span>sur la liste électorale</span></h1>
       <p>Consulat d'Algérie à Besançon</p>
     </div>
+  </div>
+  <div class="header-divider">
+    <span class="header-badge">République Algérienne Démocratique et Populaire</span>
   </div>
 </header>
 
