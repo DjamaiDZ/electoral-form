@@ -19,26 +19,25 @@ app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const FIELDS = {
-  consularNumber  : { x: 230, y: 483.9, size: 9, maxWidth: 310 },
-  lastName        : { x:  75, y: 456.1, size: 9, maxWidth: 440 },
-  maidenName      : { x: 145, y: 428.1, size: 9, maxWidth: 370 },
-  firstName       : { x: 100, y: 400.1, size: 9, maxWidth: 415 },
-  dateOfBirth     : { x:  75, y: 372.2, size: 9, maxWidth: 155 },
-  placeOfBirth    : { x: 265, y: 372.2, size: 9, maxWidth: 200 },
-  fatherName      : { x: 165, y: 344.3, size: 9, maxWidth: 350 },
-  motherName      : { x: 220, y: 316.4, size: 9, maxWidth: 295 },
-  maritalStatus   : { x:  90, y: 288.4, size: 9, maxWidth: 420 },
-  spouseName      : { x: 155, y: 260.6, size: 9, maxWidth: 355 },
-  spouseFirstName : { x: 185, y: 232.6, size: 9, maxWidth: 325 },
-  address         : { x:  90, y: 204.6, size: 9, maxWidth: 420 },
-  postalCode      : { x: 105, y: 176.8, size: 9, maxWidth: 405 },
-  phone           : { x: 150, y: 148.8, size: 9, maxWidth: 355 },
-  email           : { x:  80, y: 120.8, size: 9, maxWidth: 400 },
-  city            : { x: 370, y:  80.5, size: 9, maxWidth: 100 },
-  requestDate     : { x: 460, y:  80.5, size: 9, maxWidth:  90 },
-  signature       : { x:  36, y:  58,   w: 160,  h: 45 },
+  consularNumber  : { x: 230, y: 490.9, size: 9, maxWidth: 310 },
+  lastName        : { x:  75, y: 463.1, size: 9, maxWidth: 440 },
+  maidenName      : { x: 145, y: 435.1, size: 9, maxWidth: 370 },
+  firstName       : { x: 100, y: 407.1, size: 9, maxWidth: 415 },
+  dateOfBirth     : { x:  75, y: 379.2, size: 9, maxWidth: 155 },
+  placeOfBirth    : { x: 265, y: 379.2, size: 9, maxWidth: 200 },
+  fatherName      : { x: 165, y: 351.3, size: 9, maxWidth: 350 },
+  motherName      : { x: 220, y: 323.4, size: 9, maxWidth: 295 },
+  maritalStatus   : { x:  90, y: 295.4, size: 9, maxWidth: 420 },
+  spouseName      : { x: 155, y: 267.6, size: 9, maxWidth: 355 },
+  spouseFirstName : { x: 185, y: 239.6, size: 9, maxWidth: 325 },
+  address         : { x:  90, y: 211.6, size: 9, maxWidth: 420 },
+  postalCode      : { x: 105, y: 183.8, size: 9, maxWidth: 405 },
+  phone           : { x: 150, y: 155.8, size: 9, maxWidth: 355 },
+  email           : { x:  80, y: 127.8, size: 9, maxWidth: 400 },
+  city            : { x: 370, y:  87.5, size: 9, maxWidth: 100 },
+  requestDate     : { x: 475, y:  87.5, size: 9, maxWidth:  80 },
+  signature       : { x:  36, y:  63,   w: 160,  h: 45 },
 };
-
 async function fillPDF(data) {
   const templatePath = path.join(__dirname, 'template.pdf');
   if (!fs.existsSync(templatePath)) {
