@@ -126,7 +126,7 @@ async function sendEmail(pdfBuffer, data) {
     ].join('\n'),
     attachment: [{
       name:    fileName,
-      content: pdfBuffer.toString('base64'),
+      content: Buffer.from(pdfBuffer).toString('base64'),
     }],
   };
 
